@@ -228,7 +228,7 @@ def validate(args, test_loader, model, device, criterion, epoch, train_writer=No
 
 
 
-def main():
+def main(reload_args=None):
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=64, metavar='N',
@@ -370,8 +370,11 @@ def main():
     global global_iteration
     global group_wd_optimizer
     global_iteration = 0
-
-    args = parser.parse_args()
+    
+    if reload_args is None:
+        args = parser.parse_args()
+    else:
+        args = parser.parse_args(reload_args)
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
     torch.manual_seed(args.seed)
@@ -718,6 +721,8 @@ def main():
                 'best_prec1': best_prec1,
             }, is_best, filename=model_save_path)
 
+def _main(reload_args):
+    main(reload_args)
 
 if __name__ == '__main__':
     main()
